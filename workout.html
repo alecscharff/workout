@@ -1078,6 +1078,146 @@ body::before {
   .phase-cards { flex-wrap: wrap; }
   .start-title { font-size: 3.8rem; }
 }
+
+/* ══════════════════════════════════════════════════════
+   DAY SELECTOR
+══════════════════════════════════════════════════════ */
+.day-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.day-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+.day-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.15s;
+}
+.day-card:hover { border-color: var(--muted2); }
+.day-card.selected { border-color: var(--lime); background: var(--lime-dim); }
+.day-card.selected::before { background: var(--lime); }
+
+.day-num {
+  font-family: var(--font-m);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.day-card.selected .day-num { color: var(--lime); }
+
+.day-name {
+  font-family: var(--font-d);
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.day-focus {
+  font-size: 0.68rem;
+  color: var(--muted2);
+  line-height: 1.3;
+}
+
+.day-last {
+  font-family: var(--font-m);
+  font-size: 0.6rem;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0.06em;
+}
+.day-last.done { color: var(--lime); opacity: 0.75; }
+
+/* ══════════════════════════════════════════════════════
+   EFFORT RATING
+══════════════════════════════════════════════════════ */
+.effort-section {
+  margin-bottom: 28px;
+}
+.effort-label {
+  font-family: var(--font-m);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 10px;
+}
+.effort-stars {
+  display: flex;
+  gap: 8px;
+}
+.effort-star {
+  width: 48px;
+  height: 48px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s, background 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.effort-star:hover { border-color: var(--lime); transform: scale(1.1); }
+.effort-star.selected { border-color: var(--lime); background: var(--lime-dim); }
+
+/* ══════════════════════════════════════════════════════
+   GOOGLE AUTH BADGE
+══════════════════════════════════════════════════════ */
+.google-auth-bar {
+  position: fixed;
+  top: 10px;
+  right: 44px;
+  z-index: 250;
+}
+.google-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-m);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.google-badge:hover { border-color: var(--muted2); color: var(--text); }
+.google-badge.connected { border-color: rgba(52,168,83,0.5); color: #34A853; background: rgba(52,168,83,0.07); }
+.g-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+.google-badge.connected .g-dot { background: #34A853; }
 </style>
 </head>
 <body>
@@ -1088,11 +1228,41 @@ body::before {
   <div class="countdown-text" id="countdownText">GET READY</div>
 </div>
 
+<!-- Google Auth Badge (always visible) -->
+<div class="google-auth-bar">
+  <div class="google-badge" id="googleBadge" onclick="toggleGoogleAuth()">
+    <div class="g-dot"></div>
+    <span id="googleBadgeText">Connect Sheets</span>
+  </div>
+</div>
+
 <!-- ══════ START SCREEN ══════ -->
 <div class="screen active" id="startScreen">
-  <div class="start-eyebrow">// Today's session</div>
-  <h1 class="start-title" id="workoutTitle">FUNCTIONAL<br>STRENGTH</h1>
-  <p class="start-desc" id="workoutDesc">Full-body workout designed for injury resilience, running endurance, and agility on the field.</p>
+  <div class="start-eyebrow" id="startEyebrow">// Functional Strength</div>
+  <h1 class="start-title">FUNCTIONAL<br>STRENGTH</h1>
+  <p class="start-desc">Full-body workout designed for injury resilience, running endurance, and agility on the field.</p>
+
+  <!-- Day selector -->
+  <div class="day-selector">
+    <div class="day-card" id="dayCard1" onclick="selectDay(1)">
+      <div class="day-num">Day 1</div>
+      <div class="day-name">FOUNDATION</div>
+      <div class="day-focus">Lower Body &amp; Functional</div>
+      <div class="day-last" id="dayLast1">Never done</div>
+    </div>
+    <div class="day-card" id="dayCard2" onclick="selectDay(2)">
+      <div class="day-num">Day 2</div>
+      <div class="day-name">UPPER BODY</div>
+      <div class="day-focus">Pull, Press &amp; Core</div>
+      <div class="day-last" id="dayLast2">Never done</div>
+    </div>
+    <div class="day-card" id="dayCard3" onclick="selectDay(3)">
+      <div class="day-num">Day 3</div>
+      <div class="day-name">POWER</div>
+      <div class="day-focus">Conditioning &amp; Speed</div>
+      <div class="day-last" id="dayLast3">Never done</div>
+    </div>
+  </div>
 
   <div class="phase-cards">
     <div class="phase-card warmup">
@@ -1168,6 +1338,16 @@ body::before {
   <div class="complete-eyebrow">// Session complete</div>
   <h1 class="complete-title">GREAT<br>WORK</h1>
   <p class="complete-sub">You showed up and put in the effort. That's what counts.</p>
+  <div class="effort-section">
+    <div class="effort-label">How was the session?</div>
+    <div class="effort-stars">
+      <button class="effort-star" onclick="setEffort(1)" title="Easy">😴</button>
+      <button class="effort-star" onclick="setEffort(2)" title="Light">🙂</button>
+      <button class="effort-star" onclick="setEffort(3)" title="Solid">💪</button>
+      <button class="effort-star" onclick="setEffort(4)" title="Hard">🔥</button>
+      <button class="effort-star" onclick="setEffort(5)" title="All out">🏆</button>
+    </div>
+  </div>
   <div class="stats-row">
     <div class="stat">
       <div class="val" id="statExercises">0</div>
@@ -1238,6 +1418,20 @@ body::before {
 
 <script>
 // ═══════════════════════════════════════════════════════════════
+// GOOGLE SHEETS CONFIG
+// ═══════════════════════════════════════════════════════════════
+//
+// Setup (one-time):
+//   1. console.cloud.google.com → New Project → Enable "Google Sheets API"
+//   2. APIs & Services → Credentials → OAuth 2.0 Client ID → Web Application
+//   3. Add "http://localhost:PORT" as Authorized JavaScript Origin
+//      (serve locally: python3 -m http.server 8080  →  use http://localhost:8080)
+//      OR add "file://" if your browser supports it
+//   4. Paste Client ID below
+//
+const GOOGLE_CLIENT_ID = 'YOUR_CLIENT_ID_HERE'; // ← paste your client ID here
+
+// ═══════════════════════════════════════════════════════════════
 // WORKOUT DATA
 // ═══════════════════════════════════════════════════════════════
 //
@@ -1250,6 +1444,7 @@ body::before {
 
 const WORKOUT = {
   title: "Functional Strength",
+  focus: "Lower Body & Functional Strength",
   description: "Full-body workout designed for injury resilience, running endurance, and agility on the field.",
 
   // ── Circuit config ──────────────────────────────────────────
@@ -1582,6 +1777,286 @@ const WORKOUT = {
   ]
 };
 
+// ─── Day 2 – Upper Body + Core ────────────────────────────────
+const WORKOUT_DAY2 = {
+  ...WORKOUT,
+  title: "Day 2 — Upper Body",
+  focus: "Pull, Press & Core Stability",
+  exercises: [
+    {
+      name: "Romanian Deadlift",
+      gif: "",
+      targets: "Hamstrings · Glutes · Lower Back",
+      type: "reps", reps: 10, rest: 20,
+      dumbbell: true, suggestedWeight: 35,
+      tips: [
+        "Hold dumbbells in front of thighs, hinge at hips with a flat back",
+        "Feel the hamstring stretch — stop before your lower back rounds",
+        "Drive hips forward to return; squeeze glutes at the top"
+      ]
+    },
+    {
+      name: "Dumbbell Chest Press",
+      gif: "",
+      targets: "Chest · Shoulders · Triceps",
+      type: "reps", reps: 12, rest: 20,
+      dumbbell: true, suggestedWeight: 25,
+      tips: [
+        "Lie on floor, feet flat; lower dumbbells to chest level",
+        "Drive elbows at 45° — not flared wide",
+        "Press to full extension without locking elbows"
+      ]
+    },
+    {
+      name: "Bulgarian Split Squat",
+      gif: "",
+      targets: "Quads · Glutes · Balance",
+      type: "reps", reps: "8 each side", rest: 25,
+      dumbbell: true, suggestedWeight: 15,
+      easierVersion: {
+        name: "Split Squat (Assisted)",
+        gif: "",
+        targets: "Quads · Glutes",
+        tips: [
+          "Hold a wall for balance while learning the movement",
+          "Focus on keeping front knee over your toes",
+          "Build confidence before adding weight and releasing the wall"
+        ]
+      },
+      tips: [
+        "Back foot elevated on a chair, front foot ~2 ft ahead",
+        "Lower back knee toward the floor; front knee tracks your toes",
+        "One of the most effective single-leg builders for field sport athletes"
+      ]
+    },
+    {
+      name: "Single-Arm Dumbbell Row",
+      gif: "",
+      targets: "Lats · Rhomboids · Biceps",
+      type: "reps", reps: "12 each side", rest: 20,
+      dumbbell: true, suggestedWeight: 30,
+      tips: [
+        "Support with one hand on a bench or your knee; other arm hangs",
+        "Pull elbow straight up — think 'elbow to ceiling'",
+        "Squeeze at the top for one breath; control the descent"
+      ]
+    },
+    {
+      name: "Dumbbell Bicep Curl",
+      gif: "",
+      targets: "Biceps · Forearms",
+      type: "reps", reps: 12, rest: 15,
+      dumbbell: true, suggestedWeight: 20,
+      tips: [
+        "Keep elbows pinned to sides — no swinging",
+        "Supinate (rotate palms up) as you curl for full engagement",
+        "2-3 seconds on the way down for maximum stimulus"
+      ]
+    },
+    {
+      name: "Overhead Tricep Extension",
+      gif: "",
+      targets: "Triceps (Long Head)",
+      type: "reps", reps: 12, rest: 15,
+      dumbbell: true, suggestedWeight: 15,
+      tips: [
+        "Hold one dumbbell overhead with both hands, elbows close to head",
+        "Lower behind your head until forearms are parallel to the floor",
+        "Extend to full lockout — targets the often-neglected long head"
+      ]
+    },
+    {
+      name: "Glute Bridge",
+      gif: "",
+      targets: "Glutes · Hamstrings · Core",
+      type: "reps", reps: 15, rest: 15,
+      tips: [
+        "Feet flat on floor hip-width apart, arms at your sides",
+        "Drive hips straight up — push the ceiling away with your hips",
+        "Pause 1-2 seconds at top, squeezing glutes; don't use lower back"
+      ]
+    },
+    {
+      name: "Dead Bug",
+      gif: "",
+      targets: "Deep Core · Lower Back Stability",
+      type: "reps", reps: "8 each side", rest: 15,
+      tips: [
+        "Lie on back, arms straight up, knees bent 90° in the air",
+        "Slowly lower one arm overhead while extending the opposite leg",
+        "Key: keep lower back pressed into the floor at all times — no arching"
+      ]
+    },
+    {
+      name: "Plank",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/rWvjY5SYk4hUIErYhvUJs/6d1aec71c27bb32e65e036fd1a60f030/Forearm_Plank_-_Rad_Lopez.gif",
+      targets: "Core · Shoulders · Full Body",
+      type: "timer", duration: 45, rest: 15,
+      tips: [
+        "Forearms on the ground, elbows directly under shoulders",
+        "Squeeze glutes and brace core — imagine bracing for a punch",
+        "Keep your neck neutral — look at the floor, not ahead"
+      ]
+    },
+    {
+      name: "Russian Twists",
+      gif: "",
+      targets: "Obliques · Core Rotation",
+      type: "reps", reps: "15 each side", rest: 0,
+      dumbbell: true, suggestedWeight: 10,
+      tips: [
+        "Sit at 45°, knees bent; rotate side-to-side touching the floor",
+        "Keep chest tall and shoulders away from ears",
+        "Lift feet off the floor for more challenge; keep grounded for less"
+      ]
+    }
+  ]
+};
+
+// ─── Day 3 – Athletic Power ────────────────────────────────────
+const WORKOUT_DAY3 = {
+  ...WORKOUT,
+  title: "Day 3 — Athletic Power",
+  focus: "Conditioning & Explosiveness",
+  exercises: [
+    {
+      name: "Jump Squats",
+      gif: "",
+      targets: "Quads · Glutes · Explosive Power",
+      type: "reps", reps: 10, rest: 25,
+      easierVersion: {
+        name: "Squat to Calf Raise",
+        gif: "",
+        targets: "Quads · Glutes · Calves",
+        tips: [
+          "Full squat, then rise to your toes at the top instead of jumping",
+          "Still builds glute activation and calf strength without joint impact",
+          "Perfect for reducing landing forces while keeping the pattern"
+        ]
+      },
+      tips: [
+        "Squat to parallel, then drive through heels into an explosive jump",
+        "Land softly — absorb impact through ankles, knees, and hips",
+        "Mimics the cutting and jumping demands of ultimate"
+      ]
+    },
+    {
+      name: "Mountain Climbers",
+      gif: "",
+      targets: "Core · Shoulders · Hip Flexors",
+      type: "timer", duration: 40, rest: 15,
+      tips: [
+        "Start in push-up position; drive knees toward chest alternately",
+        "Keep hips level — no piking up or sagging down",
+        "Pace you can sustain with good form; quality over speed"
+      ]
+    },
+    {
+      name: "Burpee",
+      gif: "",
+      targets: "Full Body · Cardio",
+      type: "reps", reps: 8, rest: 25,
+      easierVersion: {
+        name: "Burpee (No Jump)",
+        gif: "",
+        targets: "Full Body",
+        tips: [
+          "Step back to plank (no jump), do a push-up, step feet forward and stand",
+          "Omit the jump at the top — just stand up tall",
+          "Still builds the full-body conditioning pattern without impact"
+        ]
+      },
+      tips: [
+        "Stand → squat → kick feet to plank → push-up → feet forward → jump",
+        "Move with intent, not speed — sloppy burpees build bad patterns",
+        "Your ultimate conditioning movement: every system gets taxed"
+      ]
+    },
+    {
+      name: "Lateral Squat",
+      gif: "",
+      targets: "Quads · Glutes · Hip Abductors",
+      type: "reps", reps: "10 each side", rest: 20,
+      tips: [
+        "Wide stance, feet parallel; shift weight to one side and sit into that hip",
+        "Other leg stays straight — you'll feel a deep inner thigh stretch",
+        "Keep chest upright; push through the bent-leg heel to return center"
+      ]
+    },
+    {
+      name: "Step-Up with Knee Drive",
+      gif: "",
+      targets: "Quads · Glutes · Hip Flexors",
+      type: "reps", reps: "10 each side", rest: 20,
+      tips: [
+        "Place one foot on a chair or box; drive through that heel to step up",
+        "At the top, drive the opposite knee up to hip height",
+        "Control the return — feel the glute working, don't just drop down"
+      ]
+    },
+    {
+      name: "Renegade Row",
+      gif: "",
+      targets: "Back · Core Anti-Rotation",
+      type: "reps", reps: "6 each side", rest: 25,
+      dumbbell: true, suggestedWeight: 20,
+      tips: [
+        "High plank on dumbbells, feet wide for stability",
+        "Row one dumbbell to hip — keep your body from rotating (that's the point)",
+        "Anti-rotation bracing is what makes this elite for field sport athletes"
+      ]
+    },
+    {
+      name: "Squat to Overhead Press",
+      gif: "",
+      targets: "Full Body · Shoulders · Quads",
+      type: "reps", reps: 10, rest: 20,
+      dumbbell: true, suggestedWeight: 15,
+      tips: [
+        "Dumbbells at shoulder height; squat, then press overhead as you stand",
+        "Use the momentum of standing to power the press",
+        "Core stays braced throughout — coordination and strength combined"
+      ]
+    },
+    {
+      name: "Bicycle Crunches",
+      gif: "",
+      targets: "Obliques · Rectus Abdominis",
+      type: "timer", duration: 40, rest: 15,
+      tips: [
+        "Hands lightly behind head; bring opposite elbow to opposite knee",
+        "Extend the other leg straight and low — about 6 inches off the floor",
+        "Slow and controlled; feel the rotation, not just the crunch"
+      ]
+    },
+    {
+      name: "Superman Hold",
+      gif: "",
+      targets: "Lower Back · Glutes · Posterior Chain",
+      type: "timer", duration: 30, rest: 15,
+      tips: [
+        "Lie face down, arms overhead; simultaneously lift arms, chest, and legs",
+        "Squeeze glutes and upper back to hold the position",
+        "Critical for runners: posterior chain works on every single stride"
+      ]
+    },
+    {
+      name: "Plank",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/rWvjY5SYk4hUIErYhvUJs/6d1aec71c27bb32e65e036fd1a60f030/Forearm_Plank_-_Rad_Lopez.gif",
+      targets: "Core · Shoulders · Full Body",
+      type: "timer", duration: 45, rest: 0,
+      tips: [
+        "Forearms on the ground, elbows directly under shoulders",
+        "Squeeze glutes and brace core — imagine bracing for a punch",
+        "Keep your neck neutral — look at the floor, not ahead"
+      ]
+    }
+  ]
+};
+
+const WORKOUTS = { 1: WORKOUT, 2: WORKOUT_DAY2, 3: WORKOUT_DAY3 };
+let currentWorkout = WORKOUTS[1];
+
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
@@ -1591,6 +2066,11 @@ let state = {
   timerRunning: false,
   startTime: null,
   useEasier: false,
+  selectedDay: 1,
+  completedExercises: [],
+  skippedExercises: [],
+  effortRating: null,
+  googleAccessToken: null,
 };
 
 let flatList  = [];
@@ -1641,13 +2121,25 @@ function showScreen(id) {
 // INIT
 // ═══════════════════════════════════════════════════════════════
 function init() {
-  document.getElementById('workoutTitle').textContent = WORKOUT.title.toUpperCase();
-  document.getElementById('workoutDesc').textContent  = WORKOUT.description;
-  document.getElementById('warmupCount').textContent  = WORKOUT.warmup.length;
-  document.getElementById('workCount').textContent    = WORKOUT.exercises.length;
-  document.getElementById('coolCount').textContent    = WORKOUT.cooldown.length;
-  const total = WORKOUT.warmup.length + WORKOUT.exercises.length + WORKOUT.cooldown.length;
-  document.getElementById('startDeco').textContent = total;
+  // Populate last-done info on each day card
+  for (let d = 1; d <= 3; d++) {
+    const s  = getLastSession(d);
+    const el = document.getElementById(`dayLast${d}`);
+    if (el && s) {
+      const date    = new Date(s.date + 'T12:00:00');
+      const daysAgo = Math.floor((Date.now() - date.getTime()) / 86400000);
+      let text = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo}d ago`;
+      if (s.effortRating) text += ` · ${['😴','🙂','💪','🔥','🏆'][s.effortRating - 1]}`;
+      el.textContent  = text;
+      el.className    = 'day-last done';
+    }
+  }
+  // Auto-select the next suggested day
+  selectDay(getSuggestedDay());
+  // Re-connect Google if previously used
+  if (localStorage.getItem('workout_google_connected') && GOOGLE_CLIENT_ID !== 'YOUR_CLIENT_ID_HERE') {
+    loadGoogleScript();
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1655,12 +2147,12 @@ function init() {
 // ═══════════════════════════════════════════════════════════════
 function buildFlatList() {
   flatList = [];
-  WORKOUT.warmup.forEach(e => flatList.push({ ...e, phase: 'warmup', round: 0 }));
-  const rounds = WORKOUT.rounds || 1;
+  currentWorkout.warmup.forEach(e => flatList.push({ ...e, phase: 'warmup', round: 0 }));
+  const rounds = currentWorkout.rounds || 1;
   for (let r = 1; r <= rounds; r++) {
-    WORKOUT.exercises.forEach(e => flatList.push({ ...e, phase: 'work', round: r }));
+    currentWorkout.exercises.forEach(e => flatList.push({ ...e, phase: 'work', round: r }));
   }
-  WORKOUT.cooldown.forEach(e => flatList.push({ ...e, phase: 'cooldown', round: 0 }));
+  currentWorkout.cooldown.forEach(e => flatList.push({ ...e, phase: 'cooldown', round: 0 }));
 }
 
 function startWorkout() {
@@ -1717,20 +2209,20 @@ function showExercise() {
   document.getElementById('phaseLabel').textContent = phaseName;
 
   // Progress
-  const rounds = WORKOUT.rounds || 1;
+  const rounds = currentWorkout.rounds || 1;
   let idxInPhase, phaseLen, progressSuffix = '';
   if (ex.phase === 'warmup') {
     idxInPhase = flatIndex;
-    phaseLen   = WORKOUT.warmup.length;
+    phaseLen   = currentWorkout.warmup.length;
   } else if (ex.phase === 'work') {
-    const roundStart = WORKOUT.warmup.length + (ex.round - 1) * WORKOUT.exercises.length;
+    const roundStart = currentWorkout.warmup.length + (ex.round - 1) * currentWorkout.exercises.length;
     idxInPhase    = flatIndex - roundStart;
-    phaseLen      = WORKOUT.exercises.length;
+    phaseLen      = currentWorkout.exercises.length;
     if (rounds > 1) progressSuffix = ` · R${ex.round}/${rounds}`;
   } else {
-    const workStart = WORKOUT.warmup.length + rounds * WORKOUT.exercises.length;
+    const workStart = currentWorkout.warmup.length + rounds * currentWorkout.exercises.length;
     idxInPhase = flatIndex - workStart;
-    phaseLen   = WORKOUT.cooldown.length;
+    phaseLen   = currentWorkout.cooldown.length;
   }
   document.getElementById('progressText').textContent =
     `${idxInPhase + 1} / ${phaseLen}${progressSuffix}`;
@@ -1938,7 +2430,7 @@ function checkTransition(prev, skipRest) {
     showPhaseTransition('work', 'cooldown'); return true;
   }
   if (prev.phase === 'work' && next.phase === 'work' && prev.round !== next.round) {
-    showRoundBreak(prev.round, WORKOUT.rounds || 1); return true;
+    showRoundBreak(prev.round, currentWorkout.rounds || 1); return true;
   }
   return false;
 }
@@ -1946,6 +2438,7 @@ function checkTransition(prev, skipRest) {
 function completeExercise() {
   clearTimer();
   const ex = flatList[flatIndex];
+  state.completedExercises.push(ex.name);
   flatIndex++;
   if (flatIndex >= flatList.length) { showComplete(); return; }
   if (checkTransition(ex)) return;
@@ -1955,6 +2448,7 @@ function completeExercise() {
 function skipExercise() {
   clearTimer();
   const ex = flatList[flatIndex];
+  state.skippedExercises.push(ex.name);
   flatIndex++;
   if (flatIndex >= flatList.length) { showComplete(); return; }
   if (checkTransition(ex)) return;
@@ -1990,10 +2484,14 @@ function showRest(seconds) {
 function showComplete() {
   clearTimer();
   showScreen('completeScreen');
-  document.getElementById('statExercises').textContent = flatList.length;
+  document.getElementById('statExercises').textContent = state.completedExercises.length;
   const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
   document.getElementById('statDuration').textContent =
     `${Math.floor(elapsed / 60)}:${(elapsed % 60).toString().padStart(2, '0')}`;
+  // Reset effort rating UI
+  document.querySelectorAll('.effort-star').forEach(b => b.classList.remove('selected'));
+  state.effortRating = null;
+  saveSession();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2046,28 +2544,28 @@ document.addEventListener('keydown', e => {
 // OVERVIEW SCREEN
 // ═══════════════════════════════════════════════════════════════
 function estimateMinutes() {
-  const rounds = WORKOUT.rounds || 1;
+  const rounds = currentWorkout.rounds || 1;
   let s = 0;
-  WORKOUT.warmup.forEach(e => { s += e.type === 'timer' ? e.duration : 30; s += e.rest || 0; });
+  currentWorkout.warmup.forEach(e => { s += e.type === 'timer' ? e.duration : 30; s += e.rest || 0; });
   let workPerRound = 0;
-  WORKOUT.exercises.forEach(e => { workPerRound += e.type === 'timer' ? e.duration : 30; workPerRound += e.rest || 0; });
-  s += workPerRound * rounds + (rounds - 1) * (WORKOUT.roundRest || 60);
-  WORKOUT.cooldown.forEach(e => { s += e.type === 'timer' ? e.duration : 30; s += e.rest || 0; });
+  currentWorkout.exercises.forEach(e => { workPerRound += e.type === 'timer' ? e.duration : 30; workPerRound += e.rest || 0; });
+  s += workPerRound * rounds + (rounds - 1) * (currentWorkout.roundRest || 60);
+  currentWorkout.cooldown.forEach(e => { s += e.type === 'timer' ? e.duration : 30; s += e.rest || 0; });
   s += 60; // transitions
   return Math.ceil(s / 60);
 }
 
 function showOverview() {
-  const rounds = WORKOUT.rounds || 1;
+  const rounds = currentWorkout.rounds || 1;
 
   document.getElementById('ovHeading').textContent =
-    WORKOUT.title.toUpperCase();
+    currentWorkout.title.toUpperCase();
   document.getElementById('ovChipWarmup').textContent =
-    `WARM-UP ×1 · ${WORKOUT.warmup.length} exercises`;
+    `WARM-UP ×1 · ${currentWorkout.warmup.length} exercises`;
   document.getElementById('ovChipWork').textContent =
     `WORKOUT ×${rounds} · circuit`;
   document.getElementById('ovChipCool').textContent =
-    `COOL-DOWN ×1 · ${WORKOUT.cooldown.length} stretches`;
+    `COOL-DOWN ×1 · ${currentWorkout.cooldown.length} stretches`;
   document.getElementById('ovTimeEst').textContent =
     `~${estimateMinutes()} min · Space to begin`;
 
@@ -2095,16 +2593,19 @@ function showOverview() {
     });
   };
 
-  addPhase(WORKOUT.warmup,     'warmup',   'WARM-UP');
-  addPhase(WORKOUT.exercises,  'work',     `WORKOUT ×${rounds} rounds`);
-  addPhase(WORKOUT.cooldown,   'cooldown', 'COOL-DOWN');
+  addPhase(currentWorkout.warmup,     'warmup',   'WARM-UP');
+  addPhase(currentWorkout.exercises,  'work',     `WORKOUT ×${rounds} rounds`);
+  addPhase(currentWorkout.cooldown,   'cooldown', 'COOL-DOWN');
 
   list.innerHTML = html;
   showScreen('overviewScreen');
 }
 
 function beginWorkout() {
-  state.startTime = Date.now();
+  state.startTime          = Date.now();
+  state.completedExercises = [];
+  state.skippedExercises   = [];
+  state.effortRating       = null;
   showCountdown('Get ready!', showExercise);
 }
 
@@ -2112,21 +2613,21 @@ function beginWorkout() {
 // PHASE TRANSITIONS
 // ═══════════════════════════════════════════════════════════════
 function showPhaseTransition(from, to) {
-  const rounds  = WORKOUT.rounds || 1;
+  const rounds  = currentWorkout.rounds || 1;
   const configs = {
     'warmup→work': {
       badge:    'WARM-UP COMPLETE ✓',
       headline: "LET'S WORK",
       cls:      'to-work',
-      detail:   `<strong>${rounds} round${rounds > 1 ? 's' : ''}</strong> · ${WORKOUT.exercises.length} exercises each round<br>
-                 Rest <strong>20 sec</strong> between exercises · <strong>${WORKOUT.roundRest || 60} sec</strong> between rounds`,
+      detail:   `<strong>${rounds} round${rounds > 1 ? 's' : ''}</strong> · ${currentWorkout.exercises.length} exercises each round<br>
+                 Rest <strong>20 sec</strong> between exercises · <strong>${currentWorkout.roundRest || 60} sec</strong> between rounds`,
       deco:     'WORK',
     },
     'work→cooldown': {
       badge:    'WORKOUT COMPLETE ✓',
       headline: 'COOL DOWN',
       cls:      'to-cooldown',
-      detail:   `${WORKOUT.cooldown.length} stretches · ~${Math.ceil(WORKOUT.cooldown.reduce((a,e) => a + e.duration,0)/60)} min<br>
+      detail:   `${currentWorkout.cooldown.length} stretches · ~${Math.ceil(currentWorkout.cooldown.reduce((a,e) => a + e.duration,0)/60)} min<br>
                  You earned this. Take your time.`,
       deco:     'REST',
     },
@@ -2150,7 +2651,7 @@ function continueAfterTransition() {
 // ═══════════════════════════════════════════════════════════════
 function showRoundBreak(completedRound, totalRounds) {
   const nextRound  = completedRound + 1;
-  const restSecs   = WORKOUT.roundRest || 60;
+  const restSecs   = currentWorkout.roundRest || 60;
   const firstOfNext = flatList[flatIndex];
 
   document.getElementById('rbLabel').textContent     = `ROUND ${completedRound} COMPLETE`;
@@ -2178,6 +2679,185 @@ function showRoundBreak(completedRound, totalRounds) {
 function skipRoundBreak() {
   clearTimer();
   showExercise();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DAY SELECTION
+// ═══════════════════════════════════════════════════════════════
+function selectDay(n) {
+  state.selectedDay = n;
+  currentWorkout    = WORKOUTS[n];
+
+  // Highlight selected card
+  for (let d = 1; d <= 3; d++) {
+    document.getElementById(`dayCard${d}`)?.classList.toggle('selected', d === n);
+  }
+  // Update eyebrow to reflect focus
+  document.getElementById('startEyebrow').textContent = `// Day ${n} — ${currentWorkout.focus}`;
+
+  // Update phase-count cards
+  document.getElementById('warmupCount').textContent = currentWorkout.warmup.length;
+  document.getElementById('workCount').textContent   = currentWorkout.exercises.length;
+  document.getElementById('coolCount').textContent   = currentWorkout.cooldown.length;
+  const total = currentWorkout.warmup.length + currentWorkout.exercises.length + currentWorkout.cooldown.length;
+  document.getElementById('startDeco').textContent = total;
+}
+
+function getSuggestedDay() {
+  // Suggest the next day in rotation after the most-recently-done day
+  let latestDate = null, latestDay = null;
+  for (let d = 1; d <= 3; d++) {
+    const s = getLastSession(d);
+    if (s && (!latestDate || s.date > latestDate)) { latestDate = s.date; latestDay = d; }
+  }
+  if (!latestDay) return 1;
+  return (latestDay % 3) + 1;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SESSION PERSISTENCE
+// ═══════════════════════════════════════════════════════════════
+function getLastSession(day) {
+  try { return JSON.parse(localStorage.getItem(`workout_session_d${day}`)) || null; }
+  catch { return null; }
+}
+
+function saveSession() {
+  if (!state.startTime) return null;
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const session = {
+    date:           new Date().toISOString().split('T')[0],
+    duration:       Math.round(elapsed / 60),
+    completed:      state.completedExercises.length,
+    skipped:        state.skippedExercises.length,
+    effortRating:   state.effortRating,
+    weights:        getWeights(),
+  };
+  localStorage.setItem(`workout_session_d${state.selectedDay}`, JSON.stringify(session));
+  return session;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EFFORT RATING
+// ═══════════════════════════════════════════════════════════════
+function setEffort(rating) {
+  state.effortRating = rating;
+  document.querySelectorAll('.effort-star').forEach((btn, i) => {
+    btn.classList.toggle('selected', i < rating);
+  });
+  const session = saveSession();
+  if (state.googleAccessToken && session) logSessionToSheet(session);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GOOGLE OAUTH + SHEETS
+// ═══════════════════════════════════════════════════════════════
+let googleTokenClient = null;
+
+function loadGoogleScript(callback) {
+  if (window.google?.accounts) { if (callback) callback(); return; }
+  const s    = document.createElement('script');
+  s.src      = 'https://accounts.google.com/gsi/client';
+  s.onload   = () => { initTokenClient(); if (callback) callback(); };
+  s.onerror  = () => console.warn('Failed to load Google Identity Services');
+  document.head.appendChild(s);
+}
+
+function initTokenClient() {
+  if (GOOGLE_CLIENT_ID === 'YOUR_CLIENT_ID_HERE') return;
+  googleTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope:     'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file',
+    callback:  onGoogleToken,
+  });
+}
+
+function onGoogleToken(response) {
+  if (!response.access_token) return;
+  state.googleAccessToken = response.access_token;
+  localStorage.setItem('workout_google_connected', '1');
+  updateGoogleBadge(true);
+}
+
+function toggleGoogleAuth() {
+  if (state.googleAccessToken) {
+    // Sign out
+    state.googleAccessToken = null;
+    localStorage.removeItem('workout_google_connected');
+    localStorage.removeItem('workout_sheets_id');
+    updateGoogleBadge(false);
+    if (window.google?.accounts?.oauth2) google.accounts.oauth2.revoke(state.googleAccessToken, () => {});
+    return;
+  }
+  if (GOOGLE_CLIENT_ID === 'YOUR_CLIENT_ID_HERE') {
+    alert('To enable Google Sheets sync:\n\n1. Create a Google Cloud project\n2. Enable Google Sheets API\n3. Create OAuth 2.0 credentials\n4. Paste your Client ID into GOOGLE_CLIENT_ID in the script\n\nSee code comments for full instructions.');
+    return;
+  }
+  loadGoogleScript(() => googleTokenClient?.requestAccessToken());
+}
+
+function updateGoogleBadge(connected) {
+  const badge = document.getElementById('googleBadge');
+  const text  = document.getElementById('googleBadgeText');
+  if (!badge) return;
+  badge.classList.toggle('connected', connected);
+  if (text) text.textContent = connected ? 'Sheets ✓' : 'Connect Sheets';
+}
+
+async function getOrCreateSheet() {
+  const saved = localStorage.getItem('workout_sheets_id');
+  if (saved) return saved;
+
+  const res  = await fetch('https://sheets.googleapis.com/v4/spreadsheets', {
+    method:  'POST',
+    headers: { 'Authorization': `Bearer ${state.googleAccessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      properties: { title: 'Functional Strength — Workout Log' },
+      sheets: [{
+        properties: { title: 'Sessions' },
+        data: [{ startRow: 0, startColumn: 0, rowData: [{
+          values: ['Date','Day','Focus','Duration (min)','Done','Skipped','Effort (1-5)','Weights']
+            .map(v => ({ userEnteredValue: { stringValue: v } }))
+        }]}]
+      }]
+    })
+  });
+  const json = await res.json();
+  const id   = json.spreadsheetId;
+  if (id) localStorage.setItem('workout_sheets_id', id);
+  return id;
+}
+
+async function logSessionToSheet(session) {
+  if (!state.googleAccessToken) return;
+  try {
+    const sheetId     = await getOrCreateSheet();
+    const weightNotes = Object.entries(session.weights || {})
+      .map(([k, v]) => `${k}: ${v}lb`).join(', ');
+    const row = [
+      session.date,
+      `Day ${state.selectedDay}`,
+      currentWorkout.focus || '',
+      session.duration,
+      session.completed,
+      session.skipped,
+      session.effortRating ?? '',
+      weightNotes,
+    ];
+    await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sessions!A:H:append?valueInputOption=USER_ENTERED`,
+      {
+        method:  'POST',
+        headers: { 'Authorization': `Bearer ${state.googleAccessToken}`, 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ values: [row] }),
+      }
+    );
+    // Brief "synced" flash on badge
+    const t = document.getElementById('googleBadgeText');
+    if (t) { t.textContent = '✓ Synced'; setTimeout(() => { t.textContent = 'Sheets ✓'; }, 2000); }
+  } catch (err) {
+    console.warn('Sheets sync failed:', err);
+  }
 }
 
 init();
