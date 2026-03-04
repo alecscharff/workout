@@ -1429,7 +1429,7 @@ body::before {
 //      OR add "file://" if your browser supports it
 //   4. Paste Client ID below
 //
-const GOOGLE_CLIENT_ID = 'YOUR_CLIENT_ID_HERE'; // ← paste your client ID here
+const GOOGLE_CLIENT_ID = '132521769464-tsdblkq9lstj28838n277h9qi2n55kcl.apps.googleusercontent.com';
 
 // ═══════════════════════════════════════════════════════════════
 // WORKOUT DATA
@@ -1785,7 +1785,7 @@ const WORKOUT_DAY2 = {
   exercises: [
     {
       name: "Romanian Deadlift",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/60uz16MZxE5zshoQp2hApM/257181d4e63dc563ed7bfb44cf791bef/Dumbbell_Romanian_Deadlift.gif",
       targets: "Hamstrings · Glutes · Lower Back",
       type: "reps", reps: 10, rest: 20,
       dumbbell: true, suggestedWeight: 35,
@@ -1797,7 +1797,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Dumbbell Chest Press",
-      gif: "",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://downloads.ctfassets.net/6ilvqec50fal/J2IZC8P8FsvT1uAbjBNmx/65294c6b946a31de4d3154355c194881/Chest_Press.gif",
       targets: "Chest · Shoulders · Triceps",
       type: "reps", reps: 12, rest: 20,
       dumbbell: true, suggestedWeight: 25,
@@ -1809,7 +1809,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Bulgarian Split Squat",
-      gif: "",
+      gif: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2019/11/Dumbbell-or-kettlebell-.gif?w=1155&h=840",
       targets: "Quads · Glutes · Balance",
       type: "reps", reps: "8 each side", rest: 25,
       dumbbell: true, suggestedWeight: 15,
@@ -1831,7 +1831,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Single-Arm Dumbbell Row",
-      gif: "",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://images.ctfassets.net/6ilvqec50fal/6y9y1M3VtNzSO54U1ZO2Ey/d8e11765da678d003c55572cb3652f92/single-arm-row.gif",
       targets: "Lats · Rhomboids · Biceps",
       type: "reps", reps: "12 each side", rest: 20,
       dumbbell: true, suggestedWeight: 30,
@@ -1843,7 +1843,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Dumbbell Bicep Curl",
-      gif: "",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://images.ctfassets.net/6ilvqec50fal/7v0LjV4LzAATm3AzvaaEQu/759c9cc35a5a17debda6682e0aba8ced/Biceps_Curl.gif",
       targets: "Biceps · Forearms",
       type: "reps", reps: 12, rest: 15,
       dumbbell: true, suggestedWeight: 20,
@@ -1855,7 +1855,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Overhead Tricep Extension",
-      gif: "",
+      gif: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/09/HL-01.07c.OverheadTricepsExtensionWithDumbbells.gif?h=840",
       targets: "Triceps (Long Head)",
       type: "reps", reps: 12, rest: 15,
       dumbbell: true, suggestedWeight: 15,
@@ -1878,7 +1878,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Dead Bug",
-      gif: "",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://downloads.ctfassets.net/6ilvqec50fal/YIqGvUegFUjlFCmh1R38b/32275009bb242a73082ae2dfaec4cece/Dead_Bug.gif",
       targets: "Deep Core · Lower Back Stability",
       type: "reps", reps: "8 each side", rest: 15,
       tips: [
@@ -1900,7 +1900,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Russian Twists",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/4ydlPBYbyYVeGzz8hAIhXI/2f197fc0aa524ab3cdd511af77fe6c83/russian-twist.gif",
       targets: "Obliques · Core Rotation",
       type: "reps", reps: "15 each side", rest: 0,
       dumbbell: true, suggestedWeight: 10,
@@ -2137,7 +2137,7 @@ function init() {
   // Auto-select the next suggested day
   selectDay(getSuggestedDay());
   // Re-connect Google if previously used
-  if (localStorage.getItem('workout_google_connected') && GOOGLE_CLIENT_ID !== '132521769464-tsdblkq9lstj28838n277h9qi2n55kcl.apps.googleusercontent.com') {
+  if (localStorage.getItem('workout_google_connected') && GOOGLE_CLIENT_ID !== 'YOUR_CLIENT_ID_HERE') {
     loadGoogleScript();
   }
 }
