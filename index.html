@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Overpass+Mono:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+button { touch-action: manipulation; }
 
 :root {
   --bg:          #07080C;
@@ -1066,6 +1067,10 @@ body::before {
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════ */
+
+/* Fix 100vh on mobile (excludes browser chrome) */
+.screen { height: 100svh; }
+
 @media (max-width: 1024px) {
   .exercise-main { grid-template-columns: 1fr; grid-template-rows: 40vh 1fr; }
   .info-panel { overflow: visible; }
@@ -1073,10 +1078,88 @@ body::before {
   .timer-display { font-size: 3.5rem; }
   .start-deco { display: none; }
 }
-@media (max-width: 600px) {
-  .screen { padding: 20px; }
-  .phase-cards { flex-wrap: wrap; }
-  .start-title { font-size: 3.8rem; }
+
+/* ── Tablet / large phone ──────────────────────────── */
+@media (max-width: 768px) {
+  .screen { padding: 16px; overflow-y: auto; }
+
+  /* Start screen */
+  .start-title { font-size: clamp(3rem, 14vw, 5rem); }
+  .start-desc { font-size: 0.9rem; margin-bottom: 24px; }
+  .day-selector { overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; flex-wrap: nowrap; }
+  .day-selector::-webkit-scrollbar { display: none; }
+  .day-card { min-width: 105px; flex-shrink: 0; padding: 12px 14px; }
+  .phase-cards { gap: 8px; }
+  .phase-card { padding: 12px 16px; min-width: 90px; }
+  .phase-card .pc-count { font-size: 1.8rem; }
+  .start-cta { gap: 12px; }
+  .start-hint { display: none; }
+
+  /* Exercise screen */
+  #exerciseScreen { padding-top: 10px; }
+  .exercise-main { grid-template-rows: min(42vw, 260px) 1fr; gap: 12px; }
+  .ex-name { font-size: 1.75rem; }
+  .ex-targets { font-size: 0.6rem; }
+  .tips-header { font-size: 0.58rem; }
+  .tip { font-size: 0.85rem; margin-bottom: 6px; }
+  .timer-display { font-size: 3rem; }
+  .rep-display { font-size: 2rem; }
+  .action-area { gap: 8px; margin-top: 8px; }
+  .btn { font-size: 1rem; padding: 13px 16px; }
+  .btn-easier { font-size: 0.65rem; padding: 8px 12px; }
+  .weight-btn { width: 40px; height: 40px; }
+
+  /* Rest / round-break screens */
+  .rest-timer { font-size: 6rem; }
+  .next-name { font-size: 1.8rem; }
+  .rb-timer { font-size: 6rem; }
+  .rb-round-name { font-size: 1.8rem; }
+
+  /* Complete screen */
+  .complete-title { font-size: clamp(3.5rem, 14vw, 6rem); }
+  .complete-sub { font-size: 0.9rem; margin-bottom: 28px; }
+  .stats-row { gap: 28px; }
+  .stat .val { font-size: 2.2rem; }
+
+  /* Transition screen */
+  .tr-headline { font-size: clamp(3.5rem, 16vw, 8rem); }
+  .tr-detail { font-size: 0.9rem; }
+  .tr-cta-row .start-hint { display: none; }
+
+  /* Overview screen */
+  #overviewScreen { padding-top: 14px; }
+  .ov-heading { font-size: clamp(1.8rem, 7vw, 3rem); }
+  .ov-ex-row { grid-template-columns: 22px 1fr auto; gap: 6px; padding: 8px 12px; font-size: 0.8rem; }
+  .ov-target, .ov-badges { display: none; }
+  .ov-chips { gap: 6px; }
+  .ov-chip { padding: 5px 10px; font-size: 0.62rem; }
+  .ov-rationale { font-size: 0.82rem; }
+  .ov-footer { gap: 12px; }
+  .ov-time-est { font-size: 0.65rem; }
+
+  /* Google badge */
+  .google-auth-bar { right: 16px; }
+
+  /* Countdown */
+  .countdown-number { font-size: 10rem; }
+}
+
+/* ── Small phone ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .screen { padding: 14px; }
+  .start-title { font-size: clamp(2.6rem, 13vw, 4rem); }
+  .phase-card { padding: 10px 12px; min-width: 80px; }
+  .phase-card .pc-count { font-size: 1.6rem; }
+  .day-card { min-width: 95px; }
+  .day-name { font-size: 1.1rem; }
+  .rest-timer { font-size: 5rem; }
+  .rb-timer { font-size: 5rem; }
+  .complete-title { font-size: clamp(3rem, 15vw, 5rem); }
+  .effort-star { width: 42px; height: 42px; font-size: 1.2rem; }
+  .effort-stars { gap: 6px; }
+  .exercise-main { grid-template-rows: 38vw 1fr; }
+  .btn-start { padding: 14px 32px; font-size: 1.2rem; }
+  .btn-done { padding: 14px 40px; font-size: 1.2rem; }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1572,7 +1655,7 @@ const WORKOUT = {
       rest: 20,
       easierVersion: {
         name: "Knee Push-ups",
-        gif: "",
+        gif: "https://images.ctfassets.net/6ilvqec50fal/7c5JC8He1CPDTwou8z5qCD/dd9ab4bca096c664d140c8eb58907c78/knee-push-up.gif",
         targets: "Chest · Shoulders · Triceps",
         tips: [
           "Place knees on the ground, hands slightly wider than shoulder width",
@@ -1646,7 +1729,7 @@ const WORKOUT = {
     },
     {
       name: "Banded Clamshells",
-      gif: "https://blog.nasm.org/hubfs/clamshell-workout.jpg",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/1RV9syrhrGPTxHIU9pFZmf/b74ff91fca46671b7b970c579934580b/Untitled_design__15_.gif",
       targets: "Glute Med · Hip Stability",
       type: "reps",
       reps: "15 each side",
@@ -1698,7 +1781,7 @@ const WORKOUT = {
   cooldown: [
     {
       name: "Standing Quad Stretch",
-      gif: "",
+      gif: "https://images.ctfassets.net/6jnflt57iyzx/5bjTAeY6iA9h38HDIflkxk/cf9c8974ee36fca0fa9b3afc02b0fe89/quads.gif",
       targets: "Quadriceps",
       type: "timer",
       duration: 40,
@@ -1867,7 +1950,7 @@ const WORKOUT_DAY2 = {
     },
     {
       name: "Glute Bridge",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/3ToFGlpEwX0V9YPWnJd1g/e0b38d9ea7df47ba4a65c19bece35db6/Glute_Bridge_-_The_Output_by_Peloton.gif",
       targets: "Glutes · Hamstrings · Core",
       type: "reps", reps: 15, rest: 15,
       tips: [
@@ -1921,7 +2004,7 @@ const WORKOUT_DAY3 = {
   exercises: [
     {
       name: "Jump Squats",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/71H4A8ivWgu3xf5nGMOiNv/05bc6da69f17f31653a615482696d32e/Squat_Jump_Assal.gif",
       targets: "Quads · Glutes · Explosive Power",
       type: "reps", reps: 10, rest: 25,
       easierVersion: {
@@ -1942,7 +2025,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Mountain Climbers",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/2Tak8Piy9QMsVaV6WfUW14/e76f1973dea175a9d24eb658ccb88582/Rad_mountain_climbers.gif",
       targets: "Core · Shoulders · Hip Flexors",
       type: "timer", duration: 40, rest: 15,
       tips: [
@@ -1953,7 +2036,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Burpee",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/69Wv5rpjfgOgA7YZo2SjpC/e4f51c2be883eb5750c3b3ad936b86d5/Rad_burpees.gif",
       targets: "Full Body · Cardio",
       type: "reps", reps: 8, rest: 25,
       easierVersion: {
@@ -1985,7 +2068,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Step-Up with Knee Drive",
-      gif: "",
+      gif: "https://spotebi.com/wp-content/uploads/2015/05/step-up-with-knee-raise-exercise-illustration-spotebi.gif",
       targets: "Quads · Glutes · Hip Flexors",
       type: "reps", reps: "10 each side", rest: 20,
       tips: [
@@ -1996,7 +2079,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Renegade Row",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/75T63ldylWXS4nR9Vih4iV/53b8bf9bb1afd77cc44304a4c4e202e7/renegade-row.gif",
       targets: "Back · Core Anti-Rotation",
       type: "reps", reps: "6 each side", rest: 25,
       dumbbell: true, suggestedWeight: 20,
@@ -2008,7 +2091,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Squat to Overhead Press",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/5RwNLOR8aXHv9yxjaXwUR/29917c6dcd6015340dcc8ba590ed7221/Thruster.gif",
       targets: "Full Body · Shoulders · Quads",
       type: "reps", reps: 10, rest: 20,
       dumbbell: true, suggestedWeight: 15,
@@ -2020,7 +2103,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Bicycle Crunches",
-      gif: "",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/7A0cyo3UnBWfS2Qc1oOqNf/5f887ddd5a63a066d6be9f1c228bbe91/bicycle-crunch.gif",
       targets: "Obliques · Rectus Abdominis",
       type: "timer", duration: 40, rest: 15,
       tips: [
@@ -2031,7 +2114,7 @@ const WORKOUT_DAY3 = {
     },
     {
       name: "Superman Hold",
-      gif: "",
+      gif: "https://downloads.ctfassets.net/6ilvqec50fal/2YGJN0O8NMIjkU8ecrgstq/6126e34758690548d30c3cd4863bcc50/Swimmers_-_Rad_Lopez.gif",
       targets: "Lower Back · Glutes · Posterior Chain",
       type: "timer", duration: 30, rest: 15,
       tips: [
@@ -2136,9 +2219,11 @@ function init() {
   }
   // Auto-select the next suggested day
   selectDay(getSuggestedDay());
-  // Re-connect Google if previously used
+  // Pre-load Google script and show reconnect badge if previously connected
   if (localStorage.getItem('workout_google_connected') && GOOGLE_CLIENT_ID !== 'YOUR_CLIENT_ID_HERE') {
     loadGoogleScript();
+    const t = document.getElementById('googleBadgeText');
+    if (t) t.textContent = 'Reconnect Sheets';
   }
 }
 
@@ -2781,12 +2866,13 @@ function onGoogleToken(response) {
 
 function toggleGoogleAuth() {
   if (state.googleAccessToken) {
-    // Sign out
+    // Sign out — save token before nulling so revoke works
+    const tokenToRevoke = state.googleAccessToken;
     state.googleAccessToken = null;
     localStorage.removeItem('workout_google_connected');
     localStorage.removeItem('workout_sheets_id');
     updateGoogleBadge(false);
-    if (window.google?.accounts?.oauth2) google.accounts.oauth2.revoke(state.googleAccessToken, () => {});
+    if (window.google?.accounts?.oauth2) google.accounts.oauth2.revoke(tokenToRevoke, () => {});
     return;
   }
   if (GOOGLE_CLIENT_ID === 'YOUR_CLIENT_ID_HERE') {
@@ -2822,9 +2908,11 @@ async function getOrCreateSheet() {
       }]
     })
   });
+  if (!res.ok) throw new Error(`Sheets create failed: ${res.status}`);
   const json = await res.json();
   const id   = json.spreadsheetId;
-  if (id) localStorage.setItem('workout_sheets_id', id);
+  if (!id) throw new Error('No spreadsheetId returned');
+  localStorage.setItem('workout_sheets_id', id);
   return id;
 }
 
