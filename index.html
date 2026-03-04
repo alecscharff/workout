@@ -1698,7 +1698,7 @@ const WORKOUT = {
   cooldown: [
     {
       name: "Standing Quad Stretch",
-      gif: "https://www.cigna.com/knowledge-center/hw/quad-stretch-acl0236",
+      gif: "",
       targets: "Quadriceps",
       type: "timer",
       duration: 40,
@@ -2247,7 +2247,7 @@ function renderGif(displayEx) {
   if (displayEx.gif) {
     const esc = displayEx.name.replace(/'/g, "\\'");
     gifContent.innerHTML =
-      `<img src="${displayEx.gif}" alt="${displayEx.name}" onerror="onGifError(this,'${esc}')">`;
+      `<img src="${displayEx.gif}" alt="${displayEx.name}" referrerpolicy="no-referrer" crossorigin="anonymous" onerror="onGifError(this,'${esc}')">`;
   } else {
     gifContent.innerHTML = gifFallbackHTML(displayEx.name);
   }
