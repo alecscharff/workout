@@ -1345,6 +1345,12 @@ body::before {
       <div class="day-focus">Conditioning &amp; Speed</div>
       <div class="day-last" id="dayLast3">Never done</div>
     </div>
+    <div class="day-card" id="dayCard4" onclick="selectDay(4)">
+      <div class="day-num">Day 4</div>
+      <div class="day-name">RECOVERY</div>
+      <div class="day-focus">Upper Body · Legs Off</div>
+      <div class="day-last" id="dayLast4">Never done</div>
+    </div>
   </div>
 
   <div class="phase-cards">
@@ -2137,7 +2143,222 @@ const WORKOUT_DAY3 = {
   ]
 };
 
-const WORKOUTS = { 1: WORKOUT, 2: WORKOUT_DAY2, 3: WORKOUT_DAY3 };
+// ─── Day 4 – Run Recovery Upper Body ──────────────────────────
+const WORKOUT_DAY4 = {
+  ...WORKOUT,
+  title: "Day 4 — Run Recovery",
+  focus: "Upper Body · Legs Are Off Duty",
+  description: "For days when your legs are cooked from running. All upper body — pull, push, and fly.",
+  warmup: [
+    {
+      name: "Arm Circles",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/2bLH4NWq1PaP8HODEEoRE0/f3da9d73dde5ce5499e5d7fd9ae7faa8/Arm_Circles.gif",
+      targets: "Shoulders · Rotator Cuff",
+      type: "timer", duration: 30, rest: 0,
+      tips: [
+        "Start with small circles and gradually widen them",
+        "Do 15 seconds forward, then 15 seconds backward",
+        "Keep your core braced and arms fully extended"
+      ]
+    },
+    {
+      name: "Shoulder Rolls",
+      gif: "",
+      targets: "Traps · Shoulders",
+      type: "timer", duration: 30, rest: 0,
+      tips: [
+        "Roll both shoulders up, back, and down in a slow circle",
+        "Reverse direction after 15 seconds",
+        "Exaggerate the movement — really pull the shoulder blades together"
+      ]
+    },
+    {
+      name: "Band Pull-Apart (or Chest Opener)",
+      gif: "",
+      targets: "Rear Delts · Rhomboids · Chest",
+      type: "reps", reps: 15, rest: 0,
+      tips: [
+        "Hold arms straight out in front at chest height",
+        "Pull hands apart to your sides, squeezing shoulder blades together",
+        "No band? Mimic the movement with tension in your hands — still activates the muscles"
+      ]
+    },
+    {
+      name: "Cat-Cow",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/yEveVZHEPPRsunvDnRBGm/0eda9342b13379227957e5b11115d8d0/Child-s_Pose_-_Matty_Maggiacomo.gif",
+      targets: "Spine · Thoracic Mobility",
+      type: "reps", reps: 10, rest: 0,
+      tips: [
+        "On hands and knees — arch back down on inhale (cow), round up on exhale (cat)",
+        "Move slowly and link each rep to a breath",
+        "Focus on opening your chest — great for pre-push and pre-pull work"
+      ]
+    }
+  ],
+  exercises: [
+    {
+      name: "Pull-Ups",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/56rOFhFkpFpuXkzb5GBGxx/e4e14d49b4a374efce7a0f77bb5e00ef/Pullup.gif",
+      targets: "Lats · Biceps · Upper Back",
+      type: "reps", reps: "Max (aim 5–8)", rest: 30,
+      easierVersion: {
+        name: "Assisted Pull-Up (Band or Chair)",
+        gif: "",
+        targets: "Lats · Biceps",
+        tips: [
+          "Loop a resistance band over the bar and place one knee in it",
+          "Or use a chair under your feet and assist with your legs just enough",
+          "Focus on pulling with your lats — not just your arms"
+        ]
+      },
+      tips: [
+        "Dead hang to start — full arm extension before each rep",
+        "Lead with your chest, not your chin — pull until chest nears the bar",
+        "Control the descent; don't just drop"
+      ]
+    },
+    {
+      name: "Push-Ups",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/7dqMEBEOlpWjq5Z1W1hkGj/b2acf08c9ca18e5b7c64a73c86b75f69/push-up-laura.gif",
+      targets: "Chest · Shoulders · Triceps",
+      type: "reps", reps: 15, rest: 20,
+      easierVersion: {
+        name: "Knee Push-Ups",
+        gif: "",
+        targets: "Chest · Shoulders · Triceps",
+        tips: [
+          "Same form as standard — just knees on the floor instead of toes",
+          "Don't let your hips sag; keep your body in a straight line from knees to shoulders",
+          "Build to 20 here before moving to full push-ups"
+        ]
+      },
+      tips: [
+        "Hands just wider than shoulder-width; body in a straight line",
+        "Lower until your chest nearly touches the floor",
+        "Elbows at ~45° — not flared wide, not tucked tight"
+      ]
+    },
+    {
+      name: "Dumbbell Chest Fly",
+      gif: "https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/02/400x400_How_to_Do_a_Dumbbell_Fly.gif",
+      targets: "Chest (Pecs) · Front Delts",
+      type: "reps", reps: 12, rest: 20,
+      dumbbell: true, suggestedWeight: 15,
+      tips: [
+        "Lie on floor, dumbbells above chest with a slight bend in your elbows",
+        "Open arms wide like you're hugging a barrel — feel the chest stretch",
+        "Bring dumbbells back together at the top; don't touch them"
+      ]
+    },
+    {
+      name: "Single-Arm Dumbbell Row",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://images.ctfassets.net/6ilvqec50fal/6y9y1M3VtNzSO54U1ZO2Ey/d8e11765da678d003c55572cb3652f92/single-arm-row.gif",
+      targets: "Lats · Rhomboids · Biceps",
+      type: "reps", reps: "12 each side", rest: 20,
+      dumbbell: true, suggestedWeight: 30,
+      tips: [
+        "Brace one hand on a table or your knee; back flat and parallel to the floor",
+        "Pull elbow straight up — think 'elbow to ceiling'",
+        "Squeeze at the top for one breath; lower with control"
+      ]
+    },
+    {
+      name: "Dumbbell Shoulder Press",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/6fGOj3hRRyFSACZqrCvf22/3c4f6eecba68a72fad2a6e60c2416523/Dumbbell_Shoulder_Press_Matty.gif",
+      targets: "Shoulders · Triceps",
+      type: "reps", reps: 10, rest: 20,
+      dumbbell: true, suggestedWeight: 20,
+      tips: [
+        "Start with dumbbells at shoulder height, palms facing forward",
+        "Press straight up until arms are nearly locked out",
+        "Brace your core — avoid arching your lower back"
+      ]
+    },
+    {
+      name: "Lateral Raises",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/42J0fy0z3xW0h7eLuChDnV/4a11bdb2a56e74b0b1e3ed0a35cf17b2/Lateral_Raise_-_Rad.gif",
+      targets: "Medial Deltoids",
+      type: "reps", reps: 12, rest: 15,
+      dumbbell: true, suggestedWeight: 10,
+      tips: [
+        "Lead with your elbows — wrists stay relaxed and slightly lower than elbows",
+        "Stop at shoulder height; going higher shifts load to your traps",
+        "Go lighter than you think — this is an isolation move"
+      ]
+    },
+    {
+      name: "Diamond Push-Ups",
+      gif: "",
+      targets: "Triceps · Inner Chest",
+      type: "reps", reps: 10, rest: 20,
+      tips: [
+        "Form a diamond shape with your thumbs and index fingers under your chest",
+        "Keep elbows close to your body as you lower down",
+        "If too hard, do them on your knees — still highly effective"
+      ]
+    },
+    {
+      name: "Dumbbell Bicep Curl",
+      gif: "https://res.cloudinary.com/peloton-cycle/image/fetch//https://images.ctfassets.net/6ilvqec50fal/7v0LjV4LzAATm3AzvaaEQu/759c9cc35a5a17debda6682e0aba8ced/Biceps_Curl.gif",
+      targets: "Biceps · Forearms",
+      type: "reps", reps: 12, rest: 15,
+      dumbbell: true, suggestedWeight: 20,
+      tips: [
+        "Keep elbows pinned to your sides — no swinging",
+        "Rotate palms up (supinate) as you curl for full engagement",
+        "2–3 seconds on the way down for maximum stimulus"
+      ]
+    }
+  ],
+  cooldown: [
+    {
+      name: "Cross-Body Shoulder Stretch",
+      gif: "",
+      targets: "Rear Deltoids · Upper Back",
+      type: "timer", duration: 30, rest: 0,
+      tips: [
+        "Pull one arm across your chest with the opposite hand",
+        "Keep the stretching arm straight and below shoulder height",
+        "15 seconds each side"
+      ]
+    },
+    {
+      name: "Doorway Chest Stretch",
+      gif: "",
+      targets: "Chest · Front Deltoids",
+      type: "timer", duration: 30, rest: 0,
+      tips: [
+        "Place forearm on a wall or doorframe at 90° and gently rotate away",
+        "Feel the stretch across your chest and front shoulder",
+        "Hold 15 seconds each side; breathe steadily"
+      ]
+    },
+    {
+      name: "Overhead Tricep Stretch",
+      gif: "",
+      targets: "Triceps · Shoulder",
+      type: "timer", duration: 30, rest: 0,
+      tips: [
+        "Raise one arm, bend the elbow so your hand drops behind your head",
+        "Use the opposite hand to gently press the elbow back",
+        "15 seconds each side; keep your torso upright"
+      ]
+    },
+    {
+      name: "Child's Pose",
+      gif: "https://images.ctfassets.net/6ilvqec50fal/yEveVZHEPPRsunvDnRBGm/0eda9342b13379227957e5b11115d8d0/Child-s_Pose_-_Matty_Maggiacomo.gif",
+      targets: "Lats · Shoulders · Lower Back",
+      type: "timer", duration: 45, rest: 0,
+      tips: [
+        "Knees wide, sit hips back toward heels, arms extended forward",
+        "Walk your hands to the right then left to stretch each lat",
+        "Focus on slow, deep breaths — you're done. Legs can rest now too."
+      ]
+    }
+  ]
+};
+
+const WORKOUTS = { 1: WORKOUT, 2: WORKOUT_DAY2, 3: WORKOUT_DAY3, 4: WORKOUT_DAY4 };
 let currentWorkout = WORKOUTS[1];
 
 // ═══════════════════════════════════════════════════════════════
@@ -2205,7 +2426,7 @@ function showScreen(id) {
 // ═══════════════════════════════════════════════════════════════
 function init() {
   // Populate last-done info on each day card
-  for (let d = 1; d <= 3; d++) {
+  for (let d = 1; d <= 4; d++) {
     const s  = getLastSession(d);
     const el = document.getElementById(`dayLast${d}`);
     if (el && s) {
@@ -2774,7 +2995,7 @@ function selectDay(n) {
   currentWorkout    = WORKOUTS[n];
 
   // Highlight selected card
-  for (let d = 1; d <= 3; d++) {
+  for (let d = 1; d <= 4; d++) {
     document.getElementById(`dayCard${d}`)?.classList.toggle('selected', d === n);
   }
   // Update eyebrow to reflect focus
@@ -2791,12 +3012,12 @@ function selectDay(n) {
 function getSuggestedDay() {
   // Suggest the next day in rotation after the most-recently-done day
   let latestDate = null, latestDay = null;
-  for (let d = 1; d <= 3; d++) {
+  for (let d = 1; d <= 4; d++) {
     const s = getLastSession(d);
     if (s && (!latestDate || s.date > latestDate)) { latestDate = s.date; latestDay = d; }
   }
   if (!latestDay) return 1;
-  return (latestDay % 3) + 1;
+  return (latestDay % 4) + 1;
 }
 
 // ═══════════════════════════════════════════════════════════════
